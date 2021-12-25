@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Component
 public class JWTUtility {
 
-    private String secret = "javatechie";
+    private String secret = "jwt-test";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

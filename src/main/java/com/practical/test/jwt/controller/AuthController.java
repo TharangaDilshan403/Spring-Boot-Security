@@ -2,13 +2,16 @@ package com.practical.test.jwt.controller;
 
 import com.practical.test.jwt.dto.UserDTO;
 import com.practical.test.jwt.utility.JWTUtility;
+import com.practical.test.jwt.utility.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class HelloController {
+public class AuthController {
 
     @Autowired
     private JWTUtility jwtUtility;
@@ -18,14 +21,14 @@ public class HelloController {
 
 
     @GetMapping
-    public String save(){
-        return "Success..";
+    public ResponseEntity save(){
+        return new ResponseEntity(new StandardResponse(200,"Success",null), HttpStatus.OK);
     }
 
 
 //    jwt
     @PostMapping("/authenticate")
-    public String generateToken(@RequestBody UserDTO userDTO) throws  Exception{
+    public ResponseEntity generateToken(@RequestBody UserDTO userDTO) throws  Exception{
 
         try{
         authenticationManager.authenticate(
@@ -34,7 +37,8 @@ public class HelloController {
     }catch (Exception ex){
             throw new Exception("Invalid user name and password...");
         }
-        return jwtUtility.generateToken(userDTO.getUserName());
+        String token =jwtUtility.generateToken(userDTO.getUserName());
+        return new ResponseEntity(new StandardResponse(200,"Success",token), HttpStatus.CREATED);
     }
 
 }
